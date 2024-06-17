@@ -76,6 +76,8 @@
 </div>
 <img style="position: absolute; display: none; " id="character" src="" alt=""/>
 <script>
+    import wixWindowFrontend from "wix-window-frontend";
+    
     const is_mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const is_local = window.location.protocol === 'file:' || window.location.hostname === 'localhost';
     const url_key = is_local ? "local_url" : "url";
@@ -743,7 +745,7 @@
                     }
                 }
                 const { scroll_target_x, scroll_target_y } = this.target_data;
-                wixWindow.scrollBy(scroll_target_x, scroll_target_y);
+                wixWindowFrontend.scrollBy(scroll_target_x, scroll_target_y);
                 // console.log("scrolling: " + scroll_target_x + " " + scroll_target_y);
             }
             
