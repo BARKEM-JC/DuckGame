@@ -1,0 +1,1130 @@
+<!-- Developed and owned by Jayden Clarke / BoomerangBytes, usage, modification, redistribution is prohibitied without express permission -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+        @media (max-width: 480px) {
+            .achievement-popup {
+                right: 8%;
+                width: 80%;
+            }
+        }
+        @media (min-width: 480px) {
+            .achievement-popup {
+                right: 20px;
+            }
+        }
+        .achievement-popup {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            transform: translateY(100%);
+            background-color: #173f17;
+            border-radius: 8px;
+            border-style: double;
+            border-width: 5px;
+            padding: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            opacity: 0;
+            transition: transform 0.5s, opacity 0.5s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .achievement-popup.slide-up {
+            transform: translateY(-100%);
+            opacity: 1;
+        }
+
+        .achievement-popup.slide-down {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        .achievement-title {
+            font-size: 13px;
+            font-weight: normal;
+            text-align: center;
+            color: #c0c0c0;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            margin-bottom: -10px;
+            margin-top: -2px;
+        }
+
+        .achievement-text {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+            margin-bottom: -2px;
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+<div id="achievementPopup" class="achievement-popup">
+    <p class="achievement-title">Achievement Unlocked!</p>
+    <p class="achievement-text">Goose Killer</p>
+</div>
+<img style="position: absolute; display: none; " id="character" src="" alt=""/>
+<script>
+    const is_mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const is_local = window.location.protocol === 'file:' || window.location.hostname === 'localhost';
+    const url_key = is_local ? "local_url" : "url";
+
+    class BloodyHammer {
+        constructor(character_id) {
+            this.hammer_frames = [];
+            this.character = document.getElementById(character_id);
+            if (this.character === null)
+                return;
+            this.hammer_animation = [
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_0.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_0.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hit_0.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hit_0.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_1.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_1.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hit_1.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hit_1.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_2.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_2.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hit_2.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hit_2.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_3.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_3.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hit_3.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hit_3.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_4_0.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_4_0.png",
+                    },
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_4_1.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_4_1.png",
+                    },
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_4_2.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_4_2.png",
+                    },
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_4_3.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_4_3.png",
+                    },
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hold_4_4.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hold_4_4.png",
+                    },
+                ],
+                [
+                    {
+                        "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/sprite_bloody_hammer_hit_4.png",
+                        "local_url": "sprites/bloody_hammer/sprite_bloody_hammer_hit_4.png",
+                    },
+                ],
+            ]
+
+            this.hammer_animation_index = 0;
+            this.hammer_frame_index = 0;
+
+            this.hitting_goose = false;
+            if (is_mobile)
+            {
+                this.mobile_hammer_image = new Image();
+                this.mobile_hammer_image.style.display = "none";
+                this.mobile_hammer_image.style.position = "absolute";
+
+                this.mobile_hammer_image.style.width = (parseInt(this.character.style.width) * 1.5) + "px";
+                this.mobile_hammer_image.style.height = (parseInt(this.character.style.height) * 1.5) + "px";
+
+                this.mobile_hammer_image.style.pointerEvents = "none";
+                document.body.appendChild(this.mobile_hammer_image);
+            }
+
+            this.cache_animations()
+
+            this.hammer_animation_id = null;
+
+            this.character.addEventListener("click", this.hit_goose.bind(this));
+            this.onHit = null;
+        }
+        clear_all() {
+            clearInterval(this.hammer_animation_id);
+            this.onHit = null;
+            console.log("Cleared")
+        }
+
+        hammer_animate() {
+            if (this.hammer_animation_index >= this.hammer_frames.length)
+            {
+                localStorage.setItem('goose_was_murdered', 'true');
+                this.character.style.display = "none";
+                this.character.style.cursor = "default";
+                
+                // Reset page width and height
+                document.body.style.width = "100%";
+                document.body.style.height = "100%";
+                //this.onHit = null;
+                //clearInterval(this.hammer_animation_id);
+                showAchievementPopup();
+                return;
+            }
+            this.hammer_frame_index += 1;
+            if (this.hammer_frame_index >= this.hammer_frames[this.hammer_animation_index].length)
+                this.hammer_frame_index = 0;
+            if (is_mobile)
+            {
+                this.mobile_hammer_image.src = this.hammer_frames[this.hammer_animation_index][this.hammer_frame_index];
+            }
+            else
+            {
+                this.character.style.cursor = 'url("' + this.hammer_frames[this.hammer_animation_index][this.hammer_frame_index] + '") 15 5, auto';
+            }
+        }
+        hit_goose() {
+            if (this.hitting_goose || this.hammer_animation_index >= this.hammer_frames.length)
+                return;
+            this.hitting_goose = true;
+            this.hammer_animation_index++;
+            if (is_mobile)
+            {
+                this.mobile_hammer_image.style.display = "block";
+                this.mobile_hammer_image.style.top = (parseInt(this.character.style.top) + (parseInt(this.character.style.height) / 8)) + "px";
+                this.mobile_hammer_image.style.left = (parseInt(this.character.style.left) - (parseInt(this.character.style.width) / 4)) + "px";
+            }
+            if (this.onHit != null)
+                this.onHit.call()
+            setTimeout(() => {
+                this.hammer_animation_index++;
+
+                setTimeout(() => {
+                    if (is_mobile)
+                    {
+                        this.mobile_hammer_image.style.display = "none";
+                    }
+                    this.hitting_goose = false;
+                }, is_mobile ? 600 : 100)
+            }, is_mobile ? 300 : 100)
+        }
+        load_frames() {
+            let lf_frames_index = 0;
+            this.hammer_animation.map((lf_frame_object) => {
+                lf_frames_index += 1;
+                let lf_current_frames = []
+                lf_frame_object.map((lf_frame) => {
+                    lf_current_frames.push(this.get_cached_image(lf_frame[url_key]));
+                });
+                this.hammer_frames.push(lf_current_frames);
+            });
+            
+            this.hammer_animation_id = setInterval(() => {
+                this.hammer_animate()
+            }, 1000 / 15);
+        }
+        cache_animations() {
+            const finished_loading = () => {
+               
+            }
+            const animations_to_load = [];
+            this.hammer_animation.map(hammer_frame_object => {
+                hammer_frame_object.map(hammer_frame => {
+                    const sprite = hammer_frame[url_key];
+                    if (!animations_to_load.includes(sprite))
+                        animations_to_load.push(sprite);
+                });
+            });
+        
+            animations_to_load.map(sprite => {
+                let cached_image = this.get_cached_image(sprite);
+                if (cached_image === sprite)
+                    cached_image = this.cache_image(sprite);
+            });
+             this.load_frames();
+        }
+        cache_image(src, force = false, callback = null) {
+            if (!force && localStorage.getItem(src))
+                return false;
+            let image = new Image();
+            image.src = src;
+            image.onload = function () {
+                let canvas = document.createElement('canvas');
+                let context = canvas.getContext('2d');
+                canvas.width = image.width;
+                canvas.height = image.height;
+                context.drawImage(image, 0, 0);
+                localStorage.setItem(src, canvas.toDataURL());
+                if (callback) {
+                    callback();
+                }
+            };
+            return true
+        }
+        get_cached_image(src) {
+            const cached_image = localStorage.getItem(src)
+            if (cached_image) {
+                return cached_image;
+            }
+            return src;
+        }
+    }
+    class Character {
+        constructor(character_id) {
+            // Character
+            this.character = document.getElementById(character_id);
+            this.stats = {
+                "state": {
+                    "health": 100,
+                    "hunger": 100,
+                    "thirst": 100,
+                    "energy": 100,
+                    "happiness": 100,
+                    "hygiene": 100,
+                    "bladder": 100,
+                    "bowels": 100,
+                },
+                "locomotion": {
+                    "movement_speed": 3,
+                    "walk_movement_speed": 4,
+                    "run_movement_speed": 10,
+                },
+            }
+            this.document_data = {
+                extra_scroll_x: 0,
+                extra_scroll_y: 0,
+            }
+            this.transform = {
+                "pos_x": 0,
+                "pos_y": 0,
+                "scale_x": 1,
+                "scale_y": 1,
+                "rotation": 0,
+                "visible": true,
+                "position": "absolute",
+                "pivot": "center center",
+            }
+            this.target_data = {
+                page_x: 0,
+                page_y: 0,
+                client_x: 0,
+                client_y: 0,
+                target_x: 0,
+                target_y: 0,
+                last_target_x: 0,
+                last_target_y: 0,
+                rotation_target: 0,
+                scroll_target_x: 0,
+                scroll_target_y: 0,
+            }
+            this.allow_infinite_scroll = true;
+            this.target_fps = 60;
+            this.time = 0;
+            this.state_function = null;
+            this.state = "idle";
+            this.wander_reset_id = null;
+            //this.scroll_cleaner_id = null;
+            this.scroll_cleaner_paused = true;
+            // Character
+
+            // Sprite
+            this.sprite = {
+                "width": 64,
+                "height": 64,
+                "forward_rotation_offset": 90,
+            }
+            this.character.style.height = this.sprite.height + "px";
+            this.character.style.width = this.sprite.width + "px";
+
+            // Animation
+            this.animation = {
+                "state": "",
+                "index": 0,
+                "frames": [],
+                "fps": 0,
+                "reverse": false,
+                "time": 0,
+            }
+            this.animation_data = {
+                "idle": {
+                    "animation": [
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_0.png",
+                            "local_url": "sprites/goose/goose_sprite_idle_0.png",
+                        },
+                    ],
+                    "fps": -1,
+                },
+                "walking": {
+                    "animation": [
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_0.png",
+                            "local_url": "sprites/goose/goose_sprite_idle_0.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_1.png",
+                            "local_url": "sprites/goose/goose_sprite_walking_0.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_0.png",
+                            "local_url": "sprites/goose/goose_sprite_idle_0.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_3.png",
+                            "local_url": "sprites/goose/goose_sprite_walking_1.png",
+                        }
+                    ],
+                    "fps": 5,
+                },
+                "running": {
+                    "animation": [
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_0.png",
+                            "local_url": "sprites/goose/goose_sprite_idle_0.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_1.png",
+                            "local_url": "sprites/goose/goose_sprite_walking_0.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_0.png",
+                            "local_url": "sprites/goose/goose_sprite_idle_0.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_3.png",
+                            "local_url": "sprites/goose/goose_sprite_walking_1.png",
+                        }
+                    ],
+                    "fps": 15,
+                },
+                "flying": {
+                    "animation": [
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/06/goose_sprite_0.png",
+                            "local_url": "sprites/goose/goose_sprite_idle_0.png",
+                        } ,
+                        {    "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/goose_sprite_flying_1.png",
+                            "local_url": "sprites/goose/goose_sprite_flying_0.png",
+                        },
+                        {    "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/goose_sprite_flying_2.png",
+                            "local_url": "sprites/goose/goose_sprite_flying_1.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/goose_sprite_flying_3.png",
+                            "local_url": "sprites/goose/goose_sprite_flying_2.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/goose_sprite_flying_2.png",
+                            "local_url": "sprites/goose/goose_sprite_flying_1.png",
+                        },
+                        {
+                            "url": "http://boomerangbytesold.local/wp-content/uploads/2023/07/goose_sprite_flying_1.png",
+                            "local_url": "sprites/goose/goose_sprite_flying_0.png",
+                        }
+                    ],
+                    "fps": 15,
+                },
+            }
+            // Animation
+
+            // Dragging
+            this.drag_offset_x = 0;
+            this.drag_offset_y = 0;
+            this.character.addEventListener("drag", this.handleDrag.bind(this));
+            this.character.addEventListener("dragend", this.handleDragEnd.bind(this));
+            this.character.addEventListener("dragstart", this.handleDragStart.bind(this));
+            // Dragging
+
+            // Targets
+            document.addEventListener("touchmove",  this.move_handler.bind(this));
+            document.addEventListener("mousemove",  this.move_handler.bind(this));
+            // Targets
+
+            this.onHitCallback = this.onHit.bind(this);
+
+            this.pageload()
+            this.scroll_cleaner_id = setInterval(this.scroll_cleaner.bind(this), 25);
+            this.main_id = setInterval(this.main.bind(this), this.fps_to_ms(this.target_fps));
+        }
+        
+        clear_all() {
+            clearInterval(this.main_id);
+            clearInterval(this.scroll_cleaner_id);
+            clearInterval(this.wander_reset_id);
+            console.log("cleared character");
+        }
+
+
+        onHit() {
+            this.set_state("flee");
+        }
+
+        scroll_cleaner() {
+            if (this.scroll_cleaner_paused || this.document_data.extra_scroll_x === 0 && this.document_data.extra_scroll_y === 0)
+            {
+                return;
+            }
+
+            if (this.document_data.extra_scroll_y < 10)
+            {
+                this.document_data.extra_scroll_y = 0;
+                document.body.style.height = "100%";
+            }
+            else
+            {
+                this.document_data.extra_scroll_y -= 4;
+                document.body.style.height = (window.innerHeight + this.document_data.extra_scroll_y) + "px";
+            }
+
+            if (this.document_data.extra_scroll_x < 10)
+            {
+                this.document_data.extra_scroll_x = 0;
+                document.body.style.width = "100%";
+            }
+            else
+            {
+                this.document_data.extra_scroll_x -= 4;
+                document.body.style.width = (window.innerWidth + this.document_data.extra_scroll_x) + "px";
+            }
+        }
+
+        normalized_movement_speed() {
+            return (this.stats.locomotion.movement_speed / this.target_fps) * 10;
+        }
+
+        main() {
+            if (this.state_function != null)
+                this.state_function();
+            this.update_animation()
+            this.save_data()
+        }
+
+        set_state(state) {
+            clearTimeout(this.wander_reset_id)
+            this.scroll_cleaner_paused = false;
+
+            if (state !== "wander")
+            {
+                this.wander_reset_id = setTimeout(() =>
+                {
+                    this.set_state("wander")
+                }, this.random_number_in_range(5000, 10000));
+                this.stats.locomotion.movement_speed = this.stats.locomotion.walk_movement_speed;
+            }
+            switch (state) {
+                case "idle":
+                    this.state_function = null;
+                    this.state_idle();
+                    break;
+                case "wander":
+                    this.state_function = this.state_wander;
+                    break;
+                case "flee":
+                    this.stats.locomotion.movement_speed = this.stats.locomotion.run_movement_speed * 2;
+                    this.state_function = this.state_flee;
+                    break;
+                case "grabbing_cursor":
+                    const scroll_direction = this.calculate_scroll_direction(0.5);
+                    if (scroll_direction.x === 0 && scroll_direction.y === 0)
+                    {
+                        this.set_state("wander");
+                        return;
+                    }
+                    this.scroll_cleaner_paused = true;
+                    this.target_data.scroll_target_x = scroll_direction.x;
+                    this.target_data.scroll_target_y = scroll_direction.y;
+                    this.target_data.rotation_target = scroll_direction.rotation;
+                    this.transform.pos_x = this.target_data.client_x;
+                    this.transform.pos_y = this.target_data.client_y + (this.sprite.height / 4);
+                    this.target_data.target_x = this.target_data.client_x;
+                    this.target_data.target_y = this.target_data.client_y + (this.sprite.height / 4);
+                    this.target_data.last_target_x = this.target_data.target_x;
+                    this.target_data.last_target_y = this.target_data.target_y;
+                    if (this.allow_infinite_scroll)
+                    {
+                        if (this.target_data.scroll_target_x > 0)
+                        {
+                            //this.document_data.extra_scroll_x += 500;
+                            //document.body.style.width = window.innerWidth + this.document_data.extra_scroll_x + "px";
+                        }
+                        if (this.target_data.scroll_target_y > 0)
+                        {
+                            //this.document_data.extra_scroll_y += 500;
+                            //document.body.style.height = window.innerHeight +  this.document_data.extra_scroll_y + "px";
+                        }
+                        //this.enable_infinite_scroll(true, true);
+                    }
+                    //this.set_state("flying_idle");
+                    this.state_function = this.state_grabbing_cursor;
+                    break;
+                case "flying_idle":
+                    this.state_function = null;
+                    this.state_flying_idle();
+                    break;
+                case "chasing_cursor":
+                    this.stats.locomotion.movement_speed = this.stats.locomotion.run_movement_speed;
+                    this.state_function = this.state_chasing_cursor;
+                    break;
+                default:
+                    console.log("Unknown state: " + state);
+                    return;
+            }
+            this.state = state;
+        }
+
+        calculate_scroll_direction(random_chance = 0.0) {
+            let scroll_x = 0;
+            let width_x = document.body.scrollWidth - window.innerWidth;
+            if (width_x > 0)
+            {
+                let width_x_left = window.scrollX;
+                let width_x_right = width_x - window.scrollX;
+                const at_max = width_x_right === 0 || width_x_left === 0;
+                if (at_max || !this.random_bool(random_chance))
+                {
+                    if (width_x_right > width_x_left)
+                    {
+                        scroll_x = this.random_int(0, 1);
+                    }
+                    else
+                    {
+                        scroll_x = this.random_int(-1, 0);
+                    }
+                }
+                else
+                {
+                    scroll_x = this.random_int(-1, 1);
+                }
+            }
+            else
+            {
+                if (this.allow_infinite_scroll)
+                {
+                    scroll_x = this.random_int(-1, 1);
+                }
+            }
+
+            let scroll_y = 0;
+            let width_y = document.body.scrollHeight - window.innerHeight;
+            if (width_y > 0)
+            {
+                let width_y_top = window.scrollY;
+                let width_y_bottom = width_y - window.scrollY;
+                const at_max = width_y_bottom === 0 || width_y_top === 0;
+                if (at_max || !this.random_bool(random_chance))
+                {
+                    if (width_y_bottom > width_y_top)
+                    {
+                        scroll_y = this.random_int(0, 1);
+                    }
+                    else
+                    {
+                        scroll_y = this.random_int(-1, 0);
+                    }
+                }
+                else
+                {
+                    scroll_y = this.random_int(-1, 1);
+                }
+            }
+            else
+            {
+                if (this.allow_infinite_scroll)
+                {
+                    scroll_y = this.random_int(-1, 1);
+                }
+            }
+
+            let rotation = 0;
+            if (scroll_x !== 0 && scroll_y !== 0)
+            {
+                rotation = Math.round(Math.atan2(-scroll_y, scroll_x) * (180 / Math.PI));
+            }
+            else
+            {
+                if (scroll_x !== 0)
+                    rotation = scroll_x > 0 ? -90 : 90 ;
+                if (scroll_y !== 0)
+                    rotation = scroll_y > 0 ? 0 : 180;
+            }
+
+            return {x: scroll_x, y: scroll_y, rotation: rotation};
+        }
+        random_bool(weight) {
+            return Math.random() < weight;
+        }
+        random_int(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        state_idle() {
+            this.set_positioning("absolute");
+            this.set_pivot_point();
+            this.set_animation("idle");
+        }
+        state_grabbing_cursor() {
+            this.set_positioning("fixed");
+            this.set_pivot_point("top center");
+            this.set_animation("walking", true);
+
+            this.target_data.target_x = this.target_data.client_x;
+            this.target_data.target_y = this.target_data.client_y + (this.sprite.height / 4);
+
+            const cursor_move_detect_threshold = 5;
+            let cursor_move_detect_value =
+                (this.target_data.last_target_x - this.target_data.target_x)
+                +
+                (this.target_data.last_target_y - this.target_data.target_y);
+
+            if (Math.abs(cursor_move_detect_value) > cursor_move_detect_threshold) {
+                this.transform.pos_x = this.target_data.page_x;
+                this.transform.pos_y = this.target_data.page_y;
+                this.set_state("flying_idle")
+                const idle_time = this.random_number_in_range(250, 1000);
+                const wander_time = this.random_number_in_range(250, 1000);
+                setTimeout(() => this.set_state('idle'), idle_time);
+                setTimeout(() => this.set_state('wander'), idle_time + wander_time);
+                return
+            }
+
+            const rotation_threshold = 4;
+            const rotation_distance = Math.abs(this.target_data.rotation_target - this.transform.rotation);
+            if (rotation_distance > rotation_threshold)
+            {
+                const new_rot = this.get_closest_rotation_direction(this.target_data.rotation_target, this.transform.rotation);
+                this.transform.rotation += rotation_distance < rotation_threshold * 2 ? new_rot * 2 : new_rot;
+            }
+            else
+            {
+                if (this.allow_infinite_scroll) {
+                    if (this.target_data.scroll_target_x !== 0)
+                    {
+                        this.document_data.extra_scroll_x += this.target_data.scroll_target_x;
+                        document.body.style.width = window.innerWidth + this.document_data.extra_scroll_x + "px";
+                    }
+                    if (this.target_data.scroll_target_y !== 0)
+                    {
+                       this.document_data.extra_scroll_y += this.target_data.scroll_target_y;
+                       document.body.style.height = window.innerHeight + this.document_data.extra_scroll_y + "px";
+                    }
+                }
+                window.scrollBy(this.target_data.scroll_target_x, this.target_data.scroll_target_y);
+                //console.log("scrolling: " + this.target_data.scroll_target_x + " " + this.target_data.scroll_target_y)
+            }
+        }
+        random_number_in_range(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        get_closest_rotation_direction(target, current) {
+            let diff = (target - current + 180) % 360 - 180;
+            return diff < 0 ? -1 : 1;
+        }
+
+        state_flying_idle() {
+            this.set_positioning("absolute");
+            this.set_pivot_point();
+            this.set_animation("flying");
+        }
+
+        state_flee() {
+            this.set_positioning("absolute");
+            this.set_pivot_point();
+            this.set_animation("running");
+
+            if (Math.random() < (0.6 / this.target_fps))
+            {
+                this.target_data.target_x = (Math.random() * document.body.scrollWidth) * 5;
+                this.target_data.target_y = (Math.random() * document.body.scrollHeight) * 5;
+            }
+
+            if (this.move_to_target())
+            {
+                this.target_data.target_x = (Math.random() * document.body.scrollWidth) * 5;
+                this.target_data.target_y = (Math.random() * document.body.scrollHeight) * 5;
+            }
+        }
+
+        state_wander() {
+            this.set_positioning("absolute");
+            this.set_pivot_point();
+            this.set_animation("walking");
+
+            if (Math.random() < (0.4 / this.target_fps))
+            {
+                this.target_data.target_x = Math.random() * document.body.scrollWidth;
+                this.target_data.target_y = Math.random() * document.body.scrollHeight;
+            }
+
+            const cursor_chase_trigger_threshold = 300;
+            const distance_to_cursor = Math.abs(this.target_data.page_x - this.transform.pos_x)
+            +
+            Math.abs(this.target_data.page_y - this.transform.pos_y);
+            if (distance_to_cursor < cursor_chase_trigger_threshold
+                && Math.random() < (0.25 / this.target_fps))
+            {
+                this.set_state("chasing_cursor");
+                return;
+            }
+
+            if (this.move_to_target())
+            {
+                this.set_animation("idle");
+            }
+        }
+
+        state_chasing_cursor() {
+            this.set_positioning("absolute");
+            this.set_pivot_point();
+            this.set_animation("running");
+
+            this.target_data.target_x = this.target_data.page_x;
+            this.target_data.target_y = this.target_data.page_y;
+
+            const cursor_chase_trigger_threshold = 300;
+
+            if (!this.cursor_in_range(cursor_chase_trigger_threshold) &&
+                Math.random() < (0.25 / this.target_fps))
+            {
+                this.set_state("idle");
+                return;
+            }
+
+            if (this.move_to_target())
+            {
+                this.set_animation("idle");
+                if (Math.random() < (0.9 / this.target_fps))
+                {
+                    this.set_state('grabbing_cursor');
+                }
+            }
+        }
+
+        cursor_in_range(distance) {
+            return (Math.abs(this.target_data.page_x - this.transform.pos_x) +
+                Math.abs(this.target_data.page_y - this.transform.pos_y))
+                < distance;
+        }
+
+        // Returns true when the target is reached
+        move_to_target() {
+            const speed = this.normalized_movement_speed()
+            const x = this.transform.pos_x;
+            const y = this.transform.pos_y;
+
+            const dx = this.target_data.target_x - x;
+            const dy = this.target_data.target_y - y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance > speed) {
+                let angle = Math.atan2(dy, dx);
+                let vx = Math.cos(angle) * speed;
+                let vy = Math.sin(angle) * speed;
+
+                this.transform.pos_x = x + vx;
+                this.transform.pos_y = y + vy;
+
+                angle = Math.atan2(dy, dx);
+                angle = angle * (180 / Math.PI);
+                this.transform.rotation = angle + this.sprite.forward_rotation_offset;
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        pageload() {
+            const finished_loading = () => {
+                this.load_data();
+                this.set_state('flying_idle');
+                this.transform.visible = true;
+                //setTimeout(() => this.set_state('idle'), 1000);
+                setTimeout(() => this.set_state('chasing_cursor'), 1500);
+            }
+            this.transform.visible = false;
+            const animations_to_load = [];
+            Object.keys(this.animation_data).map(key => {
+                this.animation_data[key]['animation'].map(anim_object =>  {
+                    const sprite = anim_object[url_key];
+                    if (!animations_to_load.includes(sprite))
+                        animations_to_load.push(sprite);
+                });
+            });
+            animations_to_load.map(sprite => {
+                let cached_image = get_cached_image(sprite);
+                if (cached_image === sprite)
+                    cache_image(sprite);
+            });
+            finished_loading();
+        }
+        load_data() {
+            let char_data = localStorage.getItem('char_data');
+            if (char_data) {
+                char_data = JSON.parse(char_data);
+                this.transform = char_data.transform;
+                this.target_data = char_data.target_data;
+                this.time = char_data.time;
+                if (this.transform.pos_x !== 0 || this.transform.pos_y !== 0)
+                    return
+                //this.animation = char_data.animation;
+            }
+            this.transform.pos_x = document.body.scrollWidth / 2;
+            this.transform.pos_y = window.innerHeight + (window.innerHeight / 2); // 2;//window.innerHeight + (window.innerHeight / 2);
+            this.character.top = this.transform.pos_y;
+            this.character.left = this.transform.pos_x;
+        }
+        save_data() {
+            const char_data = {
+                transform: this.transform,
+                target_data: this.target_data,
+                time: this.time,
+                animation: this.animation,
+            };
+            localStorage.setItem('char_data', JSON.stringify(char_data));
+        }
+
+        set_positioning(positioning_type) {
+            if (this.transform.position === positioning_type)
+                return;
+
+            switch (positioning_type)
+            {
+                case "absolute":
+                    if (this.transform.position === 'fixed')
+                    {
+                        this.transform.pos_x = this.target_data.client_x + window.scrollX;
+                        this.transform.pos_y = this.target_data.client_y + window.scrollY;
+                    }
+                    this.transform.position = "absolute";
+                    this.character.style.position = "absolute";
+                    break;
+                case "fixed":
+                    this.transform.position = "fixed";
+                    this.character.style.position = "fixed";
+                    break;
+                default:
+                    return;
+
+            }
+        }
+
+        set_pivot_point(point = "center center") {
+            point = point.replace("_", " ");
+            if (this.transform.pivot === point)
+                return;
+            this.transform.pivot = point;
+            this.character.style.transformOrigin = point;
+        }
+
+        handleDragStart(event) {
+            this.drag_offset_y = event.pageY - this.character.offsetTop;
+            this.drag_offset_x = event.pageX - this.character.offsetLeft;
+        }
+        handleDrag(event) {
+            this.transform.visible = false;
+            this.character.style.visibility = 'hidden';
+        }
+        handleDragEnd(event) {
+            // set to idle
+            this.transform.pos_x = event.pageX - this.drag_offset_x;
+            this.transform.pos_y  = event.pageY - this.drag_offset_y;
+            this.transform.rotation = 0;
+            this.transform.visible = true;
+            this.set_state('wander')
+        }
+
+        move_handler(event) {
+            const sprite_offset_x = this.sprite.width / 4;
+            const sprite_offset_y = this.sprite.height / 4;
+            this.target_data.page_x = (is_mobile && event.touches ? event.touches[0].pageX : event.pageX) - sprite_offset_x
+            this.target_data.page_y = (is_mobile && event.touches ? event.touches[0].pageY : event.pageY)  - sprite_offset_y
+            this.target_data.client_x = (is_mobile && event.touches ? event.touches[0].clientX: event.clientX) - sprite_offset_x
+            this.target_data.client_y = (is_mobile && event.touches ? event.touches[0].clientY: event.clientY) - sprite_offset_y
+        }
+
+        fps_to_ms(fps) {
+            return 1000 / fps;
+        }
+
+        update_animation() {
+            this.animation.time += this.fps_to_ms(this.target_fps);
+
+            if (this.animation.fps === -1 || this.animation.time > this.fps_to_ms(this.animation.fps)) {
+                this.animation.time = 0;
+                if (this.animation.reverse) {
+                    if (this.animation.index < 1) {
+                        this.animation.index = this.animation.frames.length - 1;
+                    } else {
+                        this.animation.index--;
+                    }
+                }
+                else if (this.animation.index < this.animation.frames.length - 1) {
+                    this.animation.index++;
+                } else {
+                    this.animation.index  = 0;
+                }
+                this.character.src = get_cached_image(this.animation.frames[this.animation.index]);
+            }
+
+            this.character.style.left = this.transform.pos_x + "px";
+            this.character.style.top = this.transform.pos_y + "px";
+
+            this.character.style.transform =
+                "rotate(" + this.transform.rotation + "deg) " +
+                "scaleX(" + this.transform.scale_x + ") " +
+                "scaleY(" + this.transform.scale_y + ")";
+
+            if (this.transform.visible) {
+                this.character.style.visibility = 'visible';
+            } else {
+                this.character.style.visibility = 'hidden';
+            }
+        }
+
+
+        set_animation(state, reverse = false) {
+            if (this.animation.state === state && this.animation.reverse === reverse)
+                return;
+            this.animation.state = state;
+            this.animation.reverse = reverse;
+            this.animation.index = 0;
+            this.animation.fps = this.animation_data[state].fps;
+            this.animation.frames = this.animation_data[state].animation.map((frame_object) => {
+                return get_cached_image(frame_object[url_key]);
+            });
+        }
+
+    }
+
+    let goose_was_murdered = localStorage.getItem('goose_was_murdered');
+    if (goose_was_murdered === null || goose_was_murdered === undefined)
+    {
+        localStorage.setItem('goose_was_murdered', 'false');
+        goose_was_murdered = "false";
+    }
+    
+    let Char = null;
+    let b_hammer = null;
+    const char_element = document.getElementById('character');
+    if (!is_mobile && goose_was_murdered === "false")
+    {
+        
+        Char = new Character("character");
+        b_hammer = new BloodyHammer("character");
+        b_hammer.onHit = Char.onHitCallback;
+        
+        char_element.style.display = '';
+    }
+
+    function showAchievementPopup() {
+        const popup = document.getElementById('achievementPopup');
+        popup.style.display = 'block';
+
+        setTimeout(function () {
+            popup.classList.add('slide-up');
+            setTimeout(function () {
+                popup.classList.remove('slide-up');
+                popup.classList.add('slide-down');
+                setTimeout(function () {
+                    popup.classList.remove('slide-down');
+                    popup.style.display = 'none';
+                    popup.remove();
+                    b_hammer.clear_all();
+                    delete b_hammer;
+                    Char.clear_all();
+                    delete Char;
+                    char_element.remove();
+                }, 500);
+            }, 6000);
+        }, 1000);
+    }
+
+    function cache_image(src, force = false, callback = null) {
+        if (!force && localStorage.getItem(src))
+            return false;
+        let image = new Image();
+        image.src = src;
+        image.onload = function() {
+            let canvas = document.createElement('canvas');
+            let context = canvas.getContext('2d');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            context.drawImage(image, 0, 0);
+            localStorage.setItem(src, canvas.toDataURL());
+            if (callback)
+                callback();
+        };
+        return true
+    }
+    function get_cached_image(src) {
+        const cached_image = localStorage.getItem(src)
+        if (cached_image) {
+            return cached_image;
+        }
+        return src;
+    }
+
+    let flying_change_timeout_id = null
+    let observer = new MutationObserver(function(mutationsList) {
+        for (let mutation of mutationsList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                console.log('Scroll height has changed:', document.documentElement.scrollHeight);
+                if (Char.state !== 'grabbing_cursor')
+                {
+                    if (flying_change_timeout_id)
+                        clearTimeout(flying_change_timeout_id);
+                    Char.set_state('flying_idle');
+                    flying_change_timeout_id = setTimeout(() => {
+                        if (Char.state === 'flying_idle')
+                            Char.set_state('chasing_cursor');
+                    }, 1000);
+                }
+            }
+        }
+    });
+    observer.observe(document.documentElement, { attributes: true });
+    //setInterval(() => {
+        //document.documentElement.style.height = (document.documentElement.scrollHeight + 300) + 'px';
+    //}, 3000);
+</script>
+</body>
+</html>
