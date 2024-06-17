@@ -725,6 +725,29 @@
                 return
             }
 
+            // WIX CONVERTED HTML
+            const rotation_threshold = 4;
+            const rotation_distance = Math.abs(this.target_data.rotation_target - this.transform.rotation);
+            if (rotation_distance > rotation_threshold) {
+                const new_rot = this.get_closest_rotation_direction(this.target_data.rotation_target, this.transform.rotation);
+                this.transform.rotation += rotation_distance < rotation_threshold * 2 ? new_rot * 2 : new_rot;
+            } else {
+                if (this.allow_infinite_scroll) {
+                    if (this.target_data.scroll_target_x !== 0) {
+                        this.document_data.extra_scroll_x += this.target_data.scroll_target_x;
+                        $w('body').style.width = `${window.innerWidth + this.document_data.extra_scroll_x}px`;
+                    }
+                    if (this.target_data.scroll_target_y !== 0) {
+                        this.document_data.extra_scroll_y += this.target_data.scroll_target_y;
+                        $w('body').style.height = `${window.innerHeight + this.document_data.extra_scroll_y}px`;
+                    }
+                }
+                const { scroll_target_x, scroll_target_y } = this.target_data;
+                wixWindow.scrollBy(scroll_target_x, scroll_target_y);
+                // console.log("scrolling: " + scroll_target_x + " " + scroll_target_y);
+            }
+            
+            /* STANDARD HTML
             const rotation_threshold = 4;
             const rotation_distance = Math.abs(this.target_data.rotation_target - this.transform.rotation);
             if (rotation_distance > rotation_threshold)
@@ -749,6 +772,7 @@
                 window.scrollBy(this.target_data.scroll_target_x, this.target_data.scroll_target_y);
                 //console.log("scrolling: " + this.target_data.scroll_target_x + " " + this.target_data.scroll_target_y)
             }
+            */
         }
         random_number_in_range(min, max) {
             return Math.random() * (max - min) + min;
