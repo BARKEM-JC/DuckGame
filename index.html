@@ -746,7 +746,7 @@
                 }
                 const { scroll_target_x, scroll_target_y } = this.target_data;
                 const message = { type: 'scrollDuck', data: [scroll_target_x, scroll_target_y] };
-                //window.parent.postMessage(message, '*');
+                window.postMessage(message, '*');
                 //wixWindowFrontend.scrollBy(scroll_target_x, scroll_target_y);
                 // console.log("scrolling: " + scroll_target_x + " " + scroll_target_y);
             }
